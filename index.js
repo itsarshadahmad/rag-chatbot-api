@@ -10,7 +10,7 @@ console.log("STARTED");
 const retriever = vectorStore.asRetriever(1);
 
 const retrievedDocuments = await retriever.invoke(
-    "Where services are available?"
+    "what services are available?"
 );
 console.log(retrievedDocuments);
 
