@@ -1,37 +1,36 @@
-import { ChatOllama } from "@langchain/ollama";
-import { loadPdfData } from "./pdfLoader.js";
+import { createEmbeddings, embeddings } from "./embeddings.js";
+import { vectorStore } from "./mongo.js";
 import "dotenv/config";
+import { loadDocuments } from "./loadDocuments.js";
 
-const pdfPath = "./Company_Overview_Consolidated.pdf";
-const docs = await loadPdfData(pdfPath);
+// const vectors = await createEmbeddings(docs);
+// await loadDocuments();
 
-import { OllamaEmbeddings } from "@langchain/ollama";
-import { MemoryVectorStore } from "langchain/vectorstores/memory";
+console.log("STARTED");
+const retriever = vectorStore.asRetriever(1);
 
-const embeddings = new OllamaEmbeddings({
-    model: "all-minilm:33m", // Default value
-    baseUrl: "http://localhost:11434", // Default value
-});
+const retrievedDocuments = await retriever.invoke(
+    "Where services are available?"
+);
+console.log(retrievedDocuments);
 
-// Create a vector store with a sample text
-const vectorStore = await MemoryVectorStore.fromDocuments(docs, embeddings);
-console.log(vectorStore);
+// console.log(vectorStore);
 
-// const res = await embeddings.embedQuery("to-let globe");
+// const vectorEmbeddings = createEmbeddings("to-let globe");
+
+// const similaritySearchResults = await vectorStore.similaritySearch(
+//     "To-let globe",
+//     1
+// );
+
+// console.log(similaritySearchResults);
+
+// for (const doc of similaritySearchResults) {
+//     console.log(`* ${doc.pageContent} [${JSON.stringify(doc.metadata, null)}]`);
+// }
+
+// const res = await addEmbeddingsToVectorStore(embeddings);
 // console.log(res);
-
-// Use the vector store as a retriever that returns a single document
-// const retriever = vectorStore.asRetriever(1);
-
-// // Retrieve the most similar text
-// const retrievedDocuments = await retriever.invoke("Where are service available?");
-
-// console.log(retrievedDocuments);
-
-// Define the model
-const model = new ChatOllama({
-    model: "llama3.2:3b",
-});
 
 // TODO: Fix RetrievalQAChain issue
 // import { RetrievalQAChain } from "langchain/chains";
@@ -39,13 +38,3 @@ const model = new ChatOllama({
 //     model,
 //     vectorStore.asRetriever()
 // );
-
-// console.log(chain);
-
-// TODO: Add vector db - mongodb, pinecone
-
-// app.post("/chat", async (req, res) => {
-//     const { query } = req.body;
-//     const response = await chain.call({ query });
-//     res.json({ answer: response.text });
-// });

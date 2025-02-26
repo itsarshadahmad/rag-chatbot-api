@@ -1,21 +1,18 @@
 import { MongoDBAtlasVectorSearch } from "@langchain/mongodb";
 import { MongoClient } from "mongodb";
+import "dotenv/config";
+import { embeddings } from "./embeddings.js";
 
-const client = new MongoClient(
-    process.env.MONGODB_ATLAS_URI || "mongodb://localhost:27017/"
-);
+const client = new MongoClient(process.env.MONGODB_ATLAS_URI || "");
 const collection = client
     .db(process.env.MONGODB_ATLAS_DB_NAME)
     .collection(process.env.MONGODB_ATLAS_COLLECTION_NAME);
 
-async function addEmbeddingsToVectorStore(embeddings) {
-    const vectorStore = new MongoDBAtlasVectorSearch(embeddings, {
-        collection: collection,
-        indexName: "vector_index",
-        textKey: "text",
-        embeddingKey: "embedding",
-    });
-    return vectorStore;
-}
+const vectorStore = new MongoDBAtlasVectorSearch(embeddings, {
+    collection: collection,
+    indexName: "vector_index", // The name of the Atlas search index. Defaults to "default"
+    textKey: "text", // The name of the collection field containing the raw content. Defaults to "text"
+    embeddingKey: "embedding", // The name of the collection field containing the embedded text. Defaults to "embedding"
+});
 
-export { addEmbeddingsToVectorStore, client };
+export { client, vectorStore };
