@@ -1,4 +1,4 @@
-# ChatBot
+# RAG ChatBot API
 
 ### Dependencies
 - Ollama

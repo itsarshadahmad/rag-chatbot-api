@@ -6,13 +6,18 @@ import { loadDocuments } from "./loadDocuments.js";
 // const vectors = await createEmbeddings(docs);
 // await loadDocuments();
 
-console.log("STARTED");
-const retriever = vectorStore.asRetriever(1);
+// console.log("STARTED");
+// const similaritySearchResults = await vectorStore.similaritySearch(
+//     "Services",
+// );
+// console.log(similaritySearchResults);
 
-const retrievedDocuments = await retriever.invoke(
-    "what services are available?"
-);
-console.log(retrievedDocuments);
+// const retriever = vectorStore.asRetriever(1);
+
+// const retrievedDocuments = await retriever.invoke(
+//     "what services are available?"
+// );
+// console.log(retrievedDocuments);
 
 // console.log(vectorStore);
 
